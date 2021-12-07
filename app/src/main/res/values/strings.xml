@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mindvalley</string>
+    <string name="title_channels">Channels</string>
+    <string name="title_new_episodes">New Episodes</string>
 </resources>

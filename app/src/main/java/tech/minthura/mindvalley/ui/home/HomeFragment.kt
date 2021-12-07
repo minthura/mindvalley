@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import tech.minthura.mindvalley.R
+import tech.minthura.mindvalley.adapters.NewEpisodesRecyclerViewAdapter
+import tech.minthura.mindvalley.domain.models.Episodes
 
 class HomeFragment : Fragment() {
 
@@ -15,6 +18,7 @@ class HomeFragment : Fragment() {
     }
 
     private lateinit var viewModel: HomeViewModel
+    private val newEpisodesRecyclerViewAdapter = NewEpisodesRecyclerViewAdapter(Episodes(null))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,6 +29,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val episodesRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_episodes)
+        episodesRecyclerView.adapter = newEpisodesRecyclerViewAdapter
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         // TODO: Use the ViewModel
     }
