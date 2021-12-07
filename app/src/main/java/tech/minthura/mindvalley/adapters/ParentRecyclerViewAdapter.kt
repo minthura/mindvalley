@@ -16,6 +16,7 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     private val newEpisodesRecyclerViewAdapter = NewEpisodesRecyclerViewAdapter(Episodes(null))
     private val coursesRecyclerViewAdapter = CoursesRecyclerViewAdapter(Episodes(null))
     private val seriesRecyclerViewAdapter = SeriesRecyclerViewAdapter(Episodes(null))
+    private val categoriesRecyclerViewAdapter = CategoriesRecyclerViewAdapter(Episodes(null))
 
     class EpisodeItemHolder(v: View) : RecyclerView.ViewHolder(v) {
         val episodesRecyclerView: RecyclerView = v.findViewById(R.id.episodes_recycler_view)
@@ -26,18 +27,29 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     class SeriesItemHolder(v: View) : RecyclerView.ViewHolder(v) {
         val seriesRecyclerView: RecyclerView = v.findViewById(R.id.series_recycler_view)
     }
+    class CategoryItemHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val categoriesRecyclerView: RecyclerView = v.findViewById(R.id.categories_recycler_view)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == newEpisodesViewType){
-            val inflatedView = parent.inflate(R.layout.episode_category_item, false)
-            return EpisodeItemHolder(inflatedView)
+        when (viewType) {
+            newEpisodesViewType -> {
+                val inflatedView = parent.inflate(R.layout.episode_category_item, false)
+                return EpisodeItemHolder(inflatedView)
+            }
+            courseViewType -> {
+                val inflatedView = parent.inflate(R.layout.course_category_item, false)
+                return CourseItemHolder(inflatedView)
+            }
+            seriesViewType -> {
+                val inflatedView = parent.inflate(R.layout.series_category_item, false)
+                return SeriesItemHolder(inflatedView)
+            }
+            else -> {
+                val inflatedView = parent.inflate(R.layout.browse_category_item, false)
+                return CategoryItemHolder(inflatedView)
+            }
         }
-        if (viewType == courseViewType){
-            val inflatedView = parent.inflate(R.layout.course_category_item, false)
-            return CourseItemHolder(inflatedView)
-        }
-        val inflatedView = parent.inflate(R.layout.series_category_item, false)
-        return SeriesItemHolder(inflatedView)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -51,6 +63,9 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is SeriesItemHolder -> {
                 holder.seriesRecyclerView.adapter = seriesRecyclerViewAdapter
             }
+            is CategoryItemHolder -> {
+                holder.categoriesRecyclerView.adapter = categoriesRecyclerViewAdapter
+            }
         }
     }
 
@@ -59,6 +74,7 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     override fun getItemViewType(position: Int): Int {
+        if (position == 5) return categoriesViewType
         return if(position % 2 == 0) seriesViewType else courseViewType
     }
 }
