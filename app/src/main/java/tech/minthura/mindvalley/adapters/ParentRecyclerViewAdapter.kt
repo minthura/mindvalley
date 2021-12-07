@@ -15,6 +15,7 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     private val categoriesViewType = 3
     private val newEpisodesRecyclerViewAdapter = NewEpisodesRecyclerViewAdapter(Episodes(null))
     private val coursesRecyclerViewAdapter = CoursesRecyclerViewAdapter(Episodes(null))
+    private val seriesRecyclerViewAdapter = SeriesRecyclerViewAdapter(Episodes(null))
 
     class EpisodeItemHolder(v: View) : RecyclerView.ViewHolder(v) {
         val episodesRecyclerView: RecyclerView = v.findViewById(R.id.episodes_recycler_view)
@@ -23,6 +24,7 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         val coursesRecyclerView: RecyclerView = v.findViewById(R.id.courses_recycler_view)
     }
     class SeriesItemHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val seriesRecyclerView: RecyclerView = v.findViewById(R.id.series_recycler_view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,7 +36,7 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             val inflatedView = parent.inflate(R.layout.course_category_item, false)
             return CourseItemHolder(inflatedView)
         }
-        val inflatedView = parent.inflate(R.layout.series_list_item, false)
+        val inflatedView = parent.inflate(R.layout.series_category_item, false)
         return SeriesItemHolder(inflatedView)
     }
 
@@ -44,6 +46,8 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         }
         else if (holder is CourseItemHolder){
             holder.coursesRecyclerView.adapter = coursesRecyclerViewAdapter
+        } else if (holder is SeriesItemHolder){
+            holder.seriesRecyclerView.adapter = seriesRecyclerViewAdapter
         }
     }
 
@@ -52,6 +56,6 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(position % 2 == 0) newEpisodesViewType else courseViewType
+        return if(position % 2 == 0) seriesViewType else courseViewType
     }
 }
