@@ -7,13 +7,13 @@ import tech.minthura.mindvalley.R
 import tech.minthura.mindvalley.domain.models.Episodes
 import tech.minthura.mindvalley.utils.inflate
 
-class NewEpisodesRecyclerViewAdapter(private val episodes : Episodes) : RecyclerView.Adapter<NewEpisodesRecyclerViewAdapter.EpisodeItemHolder>() {
+class CoursesRecyclerViewAdapter(private val episodes : Episodes) : RecyclerView.Adapter<CoursesRecyclerViewAdapter.EpisodeItemHolder>() {
 
     class EpisodeItemHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeItemHolder {
-        val inflatedView = parent.inflate(R.layout.episode_list_item, false)
+        val inflatedView = parent.inflate(R.layout.course_list_item, false)
         return EpisodeItemHolder(inflatedView)
     }
 
