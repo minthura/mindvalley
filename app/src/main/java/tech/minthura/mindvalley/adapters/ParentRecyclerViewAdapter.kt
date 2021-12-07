@@ -41,13 +41,16 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is EpisodeItemHolder){
-            holder.episodesRecyclerView.adapter = newEpisodesRecyclerViewAdapter
-        }
-        else if (holder is CourseItemHolder){
-            holder.coursesRecyclerView.adapter = coursesRecyclerViewAdapter
-        } else if (holder is SeriesItemHolder){
-            holder.seriesRecyclerView.adapter = seriesRecyclerViewAdapter
+        when (holder) {
+            is EpisodeItemHolder -> {
+                holder.episodesRecyclerView.adapter = newEpisodesRecyclerViewAdapter
+            }
+            is CourseItemHolder -> {
+                holder.coursesRecyclerView.adapter = coursesRecyclerViewAdapter
+            }
+            is SeriesItemHolder -> {
+                holder.seriesRecyclerView.adapter = seriesRecyclerViewAdapter
+            }
         }
     }
 
