@@ -14,7 +14,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tech.minthura.mindvalley.R
+import tech.minthura.mindvalley.data.daos.ChannelDao
 import tech.minthura.mindvalley.data.daos.EpisodeDao
+import tech.minthura.mindvalley.data.daos.MediaDao
 import tech.minthura.mindvalley.data.database.AppDatabase
 import tech.minthura.mindvalley.domain.ApiHelper
 import tech.minthura.mindvalley.domain.ApiHelperImpl
@@ -57,6 +59,18 @@ class ApplicationModule {
     @Singleton
     fun provideEpisodeDao(appDatabase: AppDatabase): EpisodeDao {
         return appDatabase.episodesDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChannelsDao(appDatabase: AppDatabase): ChannelDao {
+        return appDatabase.channelsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMediasDao(appDatabase: AppDatabase): MediaDao {
+        return appDatabase.mediasDao()
     }
 
     @Provides

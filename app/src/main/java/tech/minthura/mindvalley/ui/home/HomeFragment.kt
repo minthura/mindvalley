@@ -36,7 +36,11 @@ class HomeFragment : Fragment() {
         viewModel.episodes.observe(viewLifecycleOwner, {
             parentRecyclerViewAdapter.setEpisodes(it)
         })
+        viewModel.channels.observe(viewLifecycleOwner, {
+            parentRecyclerViewAdapter.setChannels(it)
+        })
         viewModel.getEpisodes()
+        viewModel.getChannels()
     }
 
 }

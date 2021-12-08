@@ -11,6 +11,9 @@ class ParentRVListItem(val title: String?, val channelTitle: String?, val imageU
 
 class ParentRVData(
         val type : ParentRVDataType,
+        val title: String?,
+        val mediaCount: String?,
+        val iconAsset: String?,
         val data : List<ParentRVListItem>,
     ) {
 }

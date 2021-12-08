@@ -9,5 +9,5 @@ data class DbNewEpisode(
     val assetUrl: String?,
     val channelTitle: String?,
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    val id: Int = 0,
 )

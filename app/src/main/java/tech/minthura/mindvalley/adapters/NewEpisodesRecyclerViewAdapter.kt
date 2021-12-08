@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import tech.minthura.mindvalley.R
 import tech.minthura.mindvalley.adapters.models.ParentRVListItem
 import tech.minthura.mindvalley.utils.inflate
@@ -25,7 +26,11 @@ class NewEpisodesRecyclerViewAdapter(private val episodes : List<ParentRVListIte
     }
 
     override fun onBindViewHolder(holder: EpisodeItemHolder, position: Int) {
-        Glide.with(holder.imageView).load(episodes[position].imageUrl).centerCrop().into(holder.imageView);
+        Glide.with(holder.imageView)
+            .load(episodes[position].imageUrl)
+            .centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .into(holder.imageView);
         holder.title.text = episodes[position].title
         holder.channelTitle.text = episodes[position].channelTitle
     }

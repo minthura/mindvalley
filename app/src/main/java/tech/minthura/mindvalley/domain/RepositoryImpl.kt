@@ -7,7 +7,9 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.*
 import retrofit2.HttpException
+import tech.minthura.mindvalley.data.daos.ChannelDao
 import tech.minthura.mindvalley.data.daos.EpisodeDao
+import tech.minthura.mindvalley.data.daos.MediaDao
 import tech.minthura.mindvalley.domain.mappers.ApiMapper
 import tech.minthura.mindvalley.domain.models.*
 import tech.minthura.mindvalley.domain.services.TAG
@@ -16,7 +18,13 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
-class RepositoryImpl @Inject constructor(private val apiHelper: ApiHelper, private val apiMapper: ApiMapper, private val episodeDao: EpisodeDao) : Repository {
+class RepositoryImpl @Inject constructor(
+    private val apiHelper: ApiHelper,
+    private val apiMapper: ApiMapper,
+    private val episodeDao: EpisodeDao,
+    private val channelDao: ChannelDao,
+    private val mediaDao: MediaDao,
+    ) : Repository {
 
     override suspend fun getEpisodes(callback : Callback<Episodes>) {
         coroutineLaunch({
@@ -25,6 +33,25 @@ class RepositoryImpl @Inject constructor(private val apiHelper: ApiHelper, priva
             episodeDao.deleteAll()
             episodeDao.insert(map)
             episodes
+        }, callback)
+    }
+
+    override suspend fun getChannels(callback: Callback<Channels>) {
+        coroutineLaunch({
+            val channels = apiHelper.getChannels()
+            channels.data?.let { data ->
+                data.channels?.let {
+                    channelDao.deleteAll()
+                    mediaDao.deleteAll()
+                    for (channel in it){
+                        val dbChannel = apiMapper.mapChannelToDbChannel(channel)
+                        val channelId = channelDao.insert(dbChannel)
+                        val dbMedias = apiMapper.mapChannelToDbMedia(channel, channelId)
+                        mediaDao.insert(dbMedias)
+                    }
+                }
+            }
+            channels
         }, callback)
     }
 
