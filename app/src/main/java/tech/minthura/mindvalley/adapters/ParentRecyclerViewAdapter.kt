@@ -4,19 +4,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tech.minthura.mindvalley.R
+import tech.minthura.mindvalley.adapters.models.ParentRVData
+import tech.minthura.mindvalley.adapters.models.ParentRVDataType
+import tech.minthura.mindvalley.adapters.models.ParentRVListItem
+import tech.minthura.mindvalley.data.entities.DbNewEpisode
 import tech.minthura.mindvalley.domain.models.Episodes
 import tech.minthura.mindvalley.utils.inflate
 
-class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ParentRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val newEpisodesViewType = 0
     private val courseViewType = 1
     private val seriesViewType = 2
     private val categoriesViewType = 3
-    private val newEpisodesRecyclerViewAdapter = NewEpisodesRecyclerViewAdapter(Episodes(null))
+
+    private val items = mutableListOf<ParentRVData>()
+
+    private val newEpisodesRecyclerViewAdapter = NewEpisodesRecyclerViewAdapter(mutableListOf())
     private val coursesRecyclerViewAdapter = CoursesRecyclerViewAdapter(Episodes(null))
     private val seriesRecyclerViewAdapter = SeriesRecyclerViewAdapter(Episodes(null))
     private val categoriesRecyclerViewAdapter = CategoriesRecyclerViewAdapter(Episodes(null))
+
 
     class EpisodeItemHolder(v: View) : RecyclerView.ViewHolder(v) {
         val episodesRecyclerView: RecyclerView = v.findViewById(R.id.episodes_recycler_view)
@@ -29,6 +37,17 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
     class CategoryItemHolder(v: View) : RecyclerView.ViewHolder(v) {
         val categoriesRecyclerView: RecyclerView = v.findViewById(R.id.categories_recycler_view)
+    }
+
+    fun setEpisodes(episodes: List<DbNewEpisode>){
+        val data = mutableListOf<ParentRVListItem>()
+        for (episode in episodes){
+            data.add(ParentRVListItem(episode.title, episode.channelTitle, episode.assetUrl))
+        }
+        val filter = items.filter { it.type == ParentRVDataType.EPISODES }
+        items.removeAll(filter)
+        items.add(ParentRVData(ParentRVDataType.EPISODES, data))
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -55,7 +74,7 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is EpisodeItemHolder -> {
-                holder.episodesRecyclerView.adapter = newEpisodesRecyclerViewAdapter
+                holder.episodesRecyclerView.adapter = NewEpisodesRecyclerViewAdapter(items[position].data)
             }
             is CourseItemHolder -> {
                 holder.coursesRecyclerView.adapter = coursesRecyclerViewAdapter
@@ -70,11 +89,15 @@ class ParentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     override fun getItemCount(): Int {
-        return 6
+        return items.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 5) return categoriesViewType
-        return if(position % 2 == 0) seriesViewType else courseViewType
+        return when(items[position].type) {
+            ParentRVDataType.EPISODES -> newEpisodesViewType
+            ParentRVDataType.COURSE -> courseViewType
+            ParentRVDataType.SERIES -> seriesViewType
+            else -> categoriesViewType
+        }
     }
 }

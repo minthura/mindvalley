@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import tech.minthura.mindvalley.R
 import tech.minthura.mindvalley.adapters.ParentRecyclerViewAdapter
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     companion object {
@@ -17,7 +19,7 @@ class HomeFragment : Fragment() {
     }
 
     private lateinit var viewModel: HomeViewModel
-    private val channelsRecyclerViewAdapter = ParentRecyclerViewAdapter()
+    private val parentRecyclerViewAdapter = ParentRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +31,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView.adapter = channelsRecyclerViewAdapter
+        recyclerView.adapter = parentRecyclerViewAdapter
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        // TODO: Use the ViewModel
+        viewModel.episodes.observe(viewLifecycleOwner, {
+            parentRecyclerViewAdapter.setEpisodes(it)
+        })
+//        viewModel.loadDummy()
     }
 
 }
