@@ -7,6 +7,7 @@ import tech.minthura.mindvalley.data.entities.DbChannel
 
 @Dao
 interface ChannelDao {
+
     @Transaction
     @Query("SELECT * FROM channels")
     fun getChannelsWithMedias(): Flow<List<ChannelWithMedias>>
@@ -16,4 +17,5 @@ interface ChannelDao {
 
     @Query("DELETE FROM channels")
     fun deleteAll()
+
 }

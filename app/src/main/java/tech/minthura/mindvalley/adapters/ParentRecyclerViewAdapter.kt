@@ -11,8 +11,10 @@ import tech.minthura.mindvalley.adapters.models.ParentRVData
 import tech.minthura.mindvalley.adapters.models.ParentRVDataType
 import tech.minthura.mindvalley.adapters.models.ParentRVListItem
 import tech.minthura.mindvalley.data.entities.ChannelWithMedias
+import tech.minthura.mindvalley.data.entities.DbCategory
 import tech.minthura.mindvalley.data.entities.DbChannel
 import tech.minthura.mindvalley.data.entities.DbNewEpisode
+import tech.minthura.mindvalley.domain.models.Categories
 import tech.minthura.mindvalley.domain.models.Episodes
 import tech.minthura.mindvalley.utils.inflate
 
@@ -22,14 +24,7 @@ class ParentRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder
     private val courseViewType = 1
     private val seriesViewType = 2
     private val categoriesViewType = 3
-
     private val items = mutableListOf<ParentRVData>()
-
-//    private val newEpisodesRecyclerViewAdapter = NewEpisodesRecyclerViewAdapter(mutableListOf())
-//    private val coursesRecyclerViewAdapter = CoursesRecyclerViewAdapter(Episodes(null))
-//    private val seriesRecyclerViewAdapter = SeriesRecyclerViewAdapter(Episodes(null))
-    private val categoriesRecyclerViewAdapter = CategoriesRecyclerViewAdapter(Episodes(null))
-
 
     class EpisodeItemHolder(v: View) : RecyclerView.ViewHolder(v) {
         val episodesRecyclerView: RecyclerView = v.findViewById(R.id.episodes_recycler_view)
@@ -51,33 +46,50 @@ class ParentRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     fun setEpisodes(episodes: List<DbNewEpisode>){
-        val data = mutableListOf<ParentRVListItem>()
-        for (episode in episodes){
-            data.add(ParentRVListItem(episode.title, episode.channelTitle, episode.assetUrl))
+        if (episodes.isNotEmpty()){
+            val data = mutableListOf<ParentRVListItem>()
+            for (episode in episodes){
+                data.add(ParentRVListItem(episode.title, episode.channelTitle, episode.assetUrl))
+            }
+            val filter = items.filter { it.type == ParentRVDataType.EPISODES }
+            items.removeAll(filter)
+            items.add(ParentRVData(ParentRVDataType.EPISODES, null, null, null, data))
+            sort()
         }
-        val filter = items.filter { it.type == ParentRVDataType.EPISODES }
-        items.removeAll(filter)
-        items.add(ParentRVData(ParentRVDataType.EPISODES, null, null, null, data))
-        notifyDataSetChanged()
+    }
+
+    fun setCategories(categories: List<DbCategory>){
+        if (categories.isNotEmpty()){
+            val data = mutableListOf<ParentRVListItem>()
+            for (category in categories){
+                data.add(ParentRVListItem(category.name, null, null))
+            }
+            val filter = items.filter { it.type == ParentRVDataType.CATEGORIES }
+            items.removeAll(filter)
+            items.add(ParentRVData(ParentRVDataType.CATEGORIES, null, null, null, data))
+            sort()
+        }
     }
 
     fun setChannels(channels: List<ChannelWithMedias>){
-        val filter1 = items.filter { it.type == ParentRVDataType.COURSE }
-        val filter2 = items.filter { it.type == ParentRVDataType.SERIES }
-        items.removeAll(filter1)
-        items.removeAll(filter2)
-        for (channelWithMedias in channels){
-            val data = mutableListOf<ParentRVListItem>()
-            for (media in channelWithMedias.dbMedia){
-                data.add(ParentRVListItem(media.title, null, media.assetUrl))
+        if (channels.isNotEmpty()){
+            val filter1 = items.filter { it.type == ParentRVDataType.COURSE }
+            val filter2 = items.filter { it.type == ParentRVDataType.SERIES }
+            items.removeAll(filter1)
+            items.removeAll(filter2)
+            for (channelWithMedias in channels){
+                val data = mutableListOf<ParentRVListItem>()
+                for (media in channelWithMedias.dbMedia){
+                    data.add(ParentRVListItem(media.title, null, media.assetUrl))
+                }
+                if (channelWithMedias.dbChannel.type == 0){
+                    items.add(ParentRVData( ParentRVDataType.COURSE, channelWithMedias.dbChannel.title, "${channelWithMedias.dbChannel.mediaCount} episodes", channelWithMedias.dbChannel.iconAsset, data))
+                } else {
+                    items.add(ParentRVData( ParentRVDataType.SERIES, channelWithMedias.dbChannel.title, "${channelWithMedias.dbChannel.mediaCount} series", channelWithMedias.dbChannel.iconAsset, data))
+                }
             }
-            if (channelWithMedias.dbChannel.type == 0){
-                items.add(ParentRVData( ParentRVDataType.COURSE, channelWithMedias.dbChannel.title, "${channelWithMedias.dbChannel.mediaCount} episodes", channelWithMedias.dbChannel.iconAsset, data))
-            } else {
-                items.add(ParentRVData( ParentRVDataType.SERIES, channelWithMedias.dbChannel.title, "${channelWithMedias.dbChannel.mediaCount} series", channelWithMedias.dbChannel.iconAsset, data))
-            }
+            sort()
         }
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -119,9 +131,20 @@ class ParentRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder.mediaCount.text = items[position].mediaCount
             }
             is CategoryItemHolder -> {
-                holder.categoriesRecyclerView.adapter = categoriesRecyclerViewAdapter
+                holder.categoriesRecyclerView.adapter = CategoriesRecyclerViewAdapter(items[position].data)
             }
         }
+    }
+
+    // Ensure the order of New Episodes, Channels, and Categories.
+    private fun sort(){
+        val episodeItems = items.filter { it.type == ParentRVDataType.EPISODES }
+        items.removeAll(episodeItems)
+        items.addAll(0, episodeItems)
+        val categoryItems = items.filter { it.type == ParentRVDataType.CATEGORIES }
+        items.removeAll(categoryItems)
+        items.addAll(items.lastIndex + 1, categoryItems)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

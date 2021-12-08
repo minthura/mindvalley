@@ -8,9 +8,11 @@ import tech.minthura.mindvalley.data.entities.DbMedia
 
 @Dao
 interface MediaDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(channels: List<DbMedia>)
 
     @Query("DELETE FROM medias")
     fun deleteAll()
+
 }

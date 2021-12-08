@@ -7,6 +7,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.*
 import retrofit2.HttpException
+import tech.minthura.mindvalley.data.daos.CategoryDao
 import tech.minthura.mindvalley.data.daos.ChannelDao
 import tech.minthura.mindvalley.data.daos.EpisodeDao
 import tech.minthura.mindvalley.data.daos.MediaDao
@@ -23,11 +24,13 @@ class RepositoryImpl @Inject constructor(
     private val apiMapper: ApiMapper,
     private val episodeDao: EpisodeDao,
     private val channelDao: ChannelDao,
+    private val categoryDao: CategoryDao,
     private val mediaDao: MediaDao,
     ) : Repository {
 
     override suspend fun getEpisodes(callback : Callback<Episodes>) {
         coroutineLaunch({
+            Thread.sleep(5000)
             val episodes = apiHelper.getEpisodes()
             val map = apiMapper.mapEpisodesToDbEpisodes(episodes)
             episodeDao.deleteAll()
@@ -52,6 +55,16 @@ class RepositoryImpl @Inject constructor(
                 }
             }
             channels
+        }, callback)
+    }
+
+    override suspend fun getCategories(callback: Callback<Categories>) {
+        coroutineLaunch({
+            val categories = apiHelper.getCategories()
+            val map = apiMapper.mapCategoriesToDbCategories(categories)
+            categoryDao.deleteAll()
+            categoryDao.insert(map)
+            categories
         }, callback)
     }
 

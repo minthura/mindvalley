@@ -14,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tech.minthura.mindvalley.R
+import tech.minthura.mindvalley.data.daos.CategoryDao
 import tech.minthura.mindvalley.data.daos.ChannelDao
 import tech.minthura.mindvalley.data.daos.EpisodeDao
 import tech.minthura.mindvalley.data.daos.MediaDao
@@ -71,6 +72,12 @@ class ApplicationModule {
     @Singleton
     fun provideMediasDao(appDatabase: AppDatabase): MediaDao {
         return appDatabase.mediasDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoriesDao(appDatabase: AppDatabase): CategoryDao {
+        return appDatabase.categoryDao()
     }
 
     @Provides

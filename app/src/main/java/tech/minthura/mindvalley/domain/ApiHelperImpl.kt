@@ -1,5 +1,6 @@
 package tech.minthura.mindvalley.domain
 
+import tech.minthura.mindvalley.domain.models.Categories
 import tech.minthura.mindvalley.domain.models.Channels
 import tech.minthura.mindvalley.domain.models.Episodes
 import tech.minthura.mindvalley.domain.services.ApiService
@@ -12,5 +13,9 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
 
     override suspend fun getChannels(): Channels {
         return apiService.getChannels()
+    }
+
+    override suspend fun getCategories(): Categories {
+        return apiService.getCategories()
     }
 }

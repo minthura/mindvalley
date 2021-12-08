@@ -1,8 +1,10 @@
 package tech.minthura.mindvalley.domain.mappers
 
+import tech.minthura.mindvalley.data.entities.DbCategory
 import tech.minthura.mindvalley.data.entities.DbChannel
 import tech.minthura.mindvalley.data.entities.DbMedia
 import tech.minthura.mindvalley.data.entities.DbNewEpisode
+import tech.minthura.mindvalley.domain.models.Categories
 import tech.minthura.mindvalley.domain.models.Channels
 import tech.minthura.mindvalley.domain.models.Episodes
 import javax.inject.Inject
@@ -11,11 +13,9 @@ class ApiMapperImpl @Inject constructor() : ApiMapper {
 
     override fun mapEpisodesToDbEpisodes(episodes: Episodes): MutableList<DbNewEpisode> {
         val dbNewEpisodes = mutableListOf<DbNewEpisode>()
-        episodes.data?.let { data ->
-            data.media?.let {
-                for (media in it){
-                    dbNewEpisodes.add(DbNewEpisode(media.title, media.coverAsset?.url, media.channel?.title))
-                }
+        episodes.data?.media?.let { data ->
+            for (media in data){
+                dbNewEpisodes.add(DbNewEpisode(media.title, media.coverAsset?.url, media.channel?.title))
             }
         }
         return dbNewEpisodes
@@ -37,6 +37,16 @@ class ApiMapperImpl @Inject constructor() : ApiMapper {
             }
         }
         return dbMedias
+    }
+
+    override fun mapCategoriesToDbCategories(categories: Categories): List<DbCategory> {
+        val dbCategories = mutableListOf<DbCategory>()
+        categories.data?.categories?.let {
+            for (category in it){
+                dbCategories.add(DbCategory(category.name))
+            }
+        }
+        return dbCategories
     }
 
     override fun mapChannelToDbChannel(channel: Channels.Channel): DbChannel {
