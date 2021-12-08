@@ -11,9 +11,12 @@ import tech.minthura.mindvalley.data.entities.DbNewEpisode
 interface EpisodeDao {
 
     @Insert(onConflict = REPLACE)
-    fun insert(users: List<DbNewEpisode>)
+    fun insert(episodes: List<DbNewEpisode>)
 
     @Query("SELECT * FROM episodes LIMIT 6")
     fun getEpisodes(): Flow<List<DbNewEpisode>>
+
+    @Query("DELETE FROM episodes")
+    fun deleteAll()
 
 }
