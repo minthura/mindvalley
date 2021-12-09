@@ -71,13 +71,9 @@ class RepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val response = suspend()
-                withContext(Dispatchers.Main){
-                    callback.onSuccess(response)
-                }
+                callback.onSuccess(response)
             } catch (e : Throwable){
-                withContext(Dispatchers.Main){
-                    handleApiError(e, callback)
-                }
+                handleApiError(e, callback)
             }
 
         }

@@ -54,12 +54,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getEpisodes(callback = object : Callback<Episodes> {
                 override fun onSuccess(t: Episodes) {
-                    isFetching.postValue(false)
-                    Log.d("HomeViewModel", "onSuccess getEpisodes")
+                    launch {
+                        isFetching.postValue(false)
+                        Log.d("HomeViewModel", "onSuccess getEpisodes")
+                    }
                 }
                 override fun onError(error: Error) {
-                    isFetching.postValue(false)
-                    Log.e("HomeViewModel", error.toString())
+                    launch {
+                        isFetching.postValue(false)
+                        Log.e("HomeViewModel", error.toString())
+                    }
                 }
             })
         }
@@ -69,12 +73,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getChannels(callback = object : Callback<Channels> {
                 override fun onSuccess(t: Channels) {
-                    isFetching.postValue(false)
-                    Log.d("HomeViewModel", "onSuccess getChannels")
+                    launch {
+                        isFetching.postValue(false)
+                        Log.d("HomeViewModel", "onSuccess getChannels")
+                    }
                 }
                 override fun onError(error: Error) {
-                    isFetching.postValue(false)
-                    Log.e("HomeViewModel", error.toString())
+                    launch {
+                        isFetching.postValue(false)
+                        Log.e("HomeViewModel", error.toString())
+                    }
                 }
             })
         }
@@ -88,8 +96,10 @@ class HomeViewModel @Inject constructor(
                     Log.d("HomeViewModel", "onSuccess getCategories")
                 }
                 override fun onError(error: Error) {
-                    isFetching.postValue(false)
-                    Log.e("HomeViewModel", error.toString())
+                    launch {
+                        isFetching.postValue(false)
+                        Log.e("HomeViewModel", error.toString())
+                    }
                 }
             })
         }
