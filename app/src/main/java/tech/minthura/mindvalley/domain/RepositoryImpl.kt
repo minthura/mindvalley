@@ -13,11 +13,12 @@ import tech.minthura.mindvalley.data.daos.EpisodeDao
 import tech.minthura.mindvalley.data.daos.MediaDao
 import tech.minthura.mindvalley.domain.mappers.ApiMapper
 import tech.minthura.mindvalley.domain.models.*
-import tech.minthura.mindvalley.domain.services.TAG
 import tech.minthura.mindvalley.domain.models.Callback
 import java.io.IOException
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
+
+const val TAG = "Mindvalley"
 
 class RepositoryImpl @Inject constructor(
     private val apiHelper: ApiHelper,

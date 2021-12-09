@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import tech.minthura.mindvalley.BuildConfig
 import tech.minthura.mindvalley.R
 import tech.minthura.mindvalley.data.daos.CategoryDao
 import tech.minthura.mindvalley.data.daos.ChannelDao
@@ -36,7 +37,11 @@ class ApplicationModule {
     @Singleton
     fun provideApiService(@ApplicationContext context: Context) : ApiService {
         val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
+        if (BuildConfig.DEBUG) {
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
+        } else {
+            interceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
         val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
         val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
         return Retrofit.Builder()

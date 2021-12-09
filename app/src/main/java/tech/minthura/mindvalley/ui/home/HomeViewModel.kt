@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(
     private val categoryDao: CategoryDao,
     private val repository: Repository
     ): ViewModel() {
+
     val isFetching = MutableLiveData(false)
     val episodes = liveData {
         episodeDao.getEpisodes().collect {
@@ -56,7 +57,6 @@ class HomeViewModel @Inject constructor(
                 override fun onSuccess(t: Episodes) {
                     launch {
                         isFetching.postValue(false)
-                        Log.d("HomeViewModel", "onSuccess getEpisodes")
                     }
                 }
                 override fun onError(error: Error) {
@@ -75,7 +75,6 @@ class HomeViewModel @Inject constructor(
                 override fun onSuccess(t: Channels) {
                     launch {
                         isFetching.postValue(false)
-                        Log.d("HomeViewModel", "onSuccess getChannels")
                     }
                 }
                 override fun onError(error: Error) {
@@ -93,7 +92,6 @@ class HomeViewModel @Inject constructor(
             repository.getCategories(callback = object : Callback<Categories> {
                 override fun onSuccess(t: Categories) {
                     isFetching.postValue(false)
-                    Log.d("HomeViewModel", "onSuccess getCategories")
                 }
                 override fun onError(error: Error) {
                     launch {
