@@ -1,6 +1,7 @@
 package tech.minthura.mindvalley.ui.home
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,7 @@ class HomeViewModel @Inject constructor(
     private val categoryDao: CategoryDao,
     private val repository: Repository
     ): ViewModel() {
-
+    val isFetching = MutableLiveData(false)
     val episodes = liveData {
         episodeDao.getEpisodes().collect {
             emit(it)
@@ -43,39 +44,51 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getEpisodes(){
+    fun getData(){
+        getEpisodes()
+        getChannels()
+        getCategories()
+    }
+
+    private fun getEpisodes(){
         viewModelScope.launch {
             repository.getEpisodes(callback = object : Callback<Episodes> {
                 override fun onSuccess(t: Episodes) {
+                    isFetching.postValue(false)
                     Log.d("HomeViewModel", "onSuccess getEpisodes")
                 }
                 override fun onError(error: Error) {
+                    isFetching.postValue(false)
                     Log.e("HomeViewModel", error.toString())
                 }
             })
         }
     }
 
-    fun getChannels(){
+    private fun getChannels(){
         viewModelScope.launch {
             repository.getChannels(callback = object : Callback<Channels> {
                 override fun onSuccess(t: Channels) {
+                    isFetching.postValue(false)
                     Log.d("HomeViewModel", "onSuccess getChannels")
                 }
                 override fun onError(error: Error) {
+                    isFetching.postValue(false)
                     Log.e("HomeViewModel", error.toString())
                 }
             })
         }
     }
 
-    fun getCategories(){
+    private fun getCategories(){
         viewModelScope.launch {
             repository.getCategories(callback = object : Callback<Categories> {
                 override fun onSuccess(t: Categories) {
+                    isFetching.postValue(false)
                     Log.d("HomeViewModel", "onSuccess getCategories")
                 }
                 override fun onError(error: Error) {
+                    isFetching.postValue(false)
                     Log.e("HomeViewModel", error.toString())
                 }
             })

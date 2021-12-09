@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import tech.minthura.mindvalley.R
 import tech.minthura.mindvalley.adapters.ParentRecyclerViewAdapter
@@ -31,6 +32,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         recyclerView.adapter = parentRecyclerViewAdapter
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.episodes.observe(viewLifecycleOwner, {
@@ -42,9 +44,13 @@ class HomeFragment : Fragment() {
         viewModel.categories.observe(viewLifecycleOwner, {
             parentRecyclerViewAdapter.setCategories(it)
         })
-        viewModel.getEpisodes()
-        viewModel.getChannels()
-        viewModel.getCategories()
+        viewModel.isFetching.observe(viewLifecycleOwner, {
+            swipeRefreshLayout.isRefreshing = it
+        })
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getData()
+        }
+        viewModel.getData()
     }
 
 }
