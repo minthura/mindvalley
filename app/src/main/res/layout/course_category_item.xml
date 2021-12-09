@@ -43,7 +43,7 @@
         android:layout_marginStart="14dp"
         android:text="15 episodes"
         android:textSize="16sp"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_medium"
         android:textColor="@color/course_series_media_count_color"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintStart_toEndOf="@+id/cardView"
