@@ -120,13 +120,13 @@ class ParentRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             is CourseItemHolder -> {
                 holder.coursesRecyclerView.adapter = CoursesRecyclerViewAdapter(items[position].data)
-                Glide.with(holder.imageView).load(items[position].iconAsset).error(R.mipmap.ic_launcher).centerCrop().into(holder.imageView);
+                Glide.with(holder.imageView).load(items[position].iconAsset).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).centerCrop().into(holder.imageView);
                 holder.title.text = items[position].title
                 holder.mediaCount.text = items[position].mediaCount
             }
             is SeriesItemHolder -> {
                 holder.seriesRecyclerView.adapter = SeriesRecyclerViewAdapter(items[position].data)
-                Glide.with(holder.imageView).load(items[position].iconAsset).error(R.mipmap.ic_launcher).centerCrop().into(holder.imageView);
+                Glide.with(holder.imageView).load(items[position].iconAsset).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).centerCrop().into(holder.imageView);
                 holder.title.text = items[position].title
                 holder.mediaCount.text = items[position].mediaCount
             }

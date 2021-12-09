@@ -33,6 +33,7 @@ class NewEpisodesRecyclerViewAdapter(private val episodes : List<ParentRVListIte
             .into(holder.imageView);
         holder.title.text = episodes[position].title
         holder.channelTitle.text = episodes[position].channelTitle
+        holder.setIsRecyclable(false)
     }
 
     override fun getItemCount(): Int {

@@ -13,8 +13,8 @@
     app:cardCornerRadius="8dp"
     android:focusable="true">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -31,11 +31,11 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginStart="8dp"
-            android:text="Conscious Parenting"
+            android:text="Attachment Parenting: Nurturing Our Children"
             android:textSize="17sp"
             android:textColor="@color/white"
             android:fontFamily="@font/roboto_medium"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/channel_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginStart="8dp"

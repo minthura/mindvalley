@@ -30,7 +30,6 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getEpisodes(callback : Callback<Episodes>) {
         coroutineLaunch({
-            Thread.sleep(5000)
             val episodes = apiHelper.getEpisodes()
             val map = apiMapper.mapEpisodesToDbEpisodes(episodes)
             episodeDao.deleteAll()
