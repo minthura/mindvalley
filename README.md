@@ -1,3 +1,5 @@
+[![Build](https://github.com/minthura/mindvalley/actions/workflows/gradle-publish.yml/badge.svg?branch=main)](https://github.com/minthura/mindvalley/actions/workflows/gradle-publish.yml)
+
 # mindvalley
 Mindvalley Android Coding Challenge
 
