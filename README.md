@@ -7,4 +7,4 @@ The most challenging part of this project would be to make sure the local databa
 
 ## Feature for the future
 
-It would be great to make a separate module for the API SDK and implement different product flavors and build variants so that we can reuse the SDK for different projects.
+It would be great to make a separate module for the API SDK and implement different product flavors and build variants so that we can reuse the SDK for different projects. :)
